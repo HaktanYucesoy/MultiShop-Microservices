@@ -7,5 +7,6 @@ namespace MultiShop.Catalog.Services.CategoryServices
         UpdateCategoryDto,GetByIdCategoryDto>
     {
         
+
     }
 }
