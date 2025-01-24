@@ -2,6 +2,7 @@ using Asp.Versioning;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Options;
 using MultiShop.Catalog.Extensions.DependencyResolvers;
+using MultiShop.Catalog.Handlers.Exception;
 using MultiShop.Catalog.Settings;
 using System.Diagnostics;
 
@@ -19,6 +20,7 @@ builder.Services.AddScoped<IDatabaseSettings>(sp =>
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 builder.Services.AddProblemDetails(options =>
 {
     options.CustomizeProblemDetails = context =>
@@ -27,6 +29,7 @@ builder.Services.AddProblemDetails(options =>
         Activity? activity = context.HttpContext.Features.Get<IHttpActivityFeature>()?.Activity;
         context.ProblemDetails.Extensions.TryAdd("traceId", activity?.Id);
         context.ProblemDetails.Extensions.TryAdd("moreDetails", context.Exception!=null?context.Exception!.StackTrace:"");
+        context.ProblemDetails.Extensions.TryAdd("details", context.Exception!.Message != null ? context.Exception.Message : "");
     };
 });
 
