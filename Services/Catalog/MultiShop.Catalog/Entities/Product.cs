@@ -1,13 +1,11 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using MultiShop.Catalog.Entities.Base;
 
 namespace MultiShop.Catalog.Entities
 {
-    public class Product:BaseEntity
+    public class Product:BaseMongoEntity
     {
-
-        [BsonId]
-        [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
-        public string ID { get; set; }
         public string ProductName { get; set; }
         public decimal ProductPrice { get; set; }
         public int  ProductStock { get; set; }
