@@ -2,9 +2,9 @@
 
 namespace MultiShop.Catalog.Exceptions.Category
 {
-    public class FailUpdateProductException:Exception
+    public class FailUpdateCategoryException:Exception
     {
-        public FailUpdateProductException():base(CategoryMessages.ERROR_OCCURED_WHILE_UPDATING_CATEGORY)
+        public FailUpdateCategoryException():base(CategoryMessages.ERROR_OCCURED_WHILE_UPDATING_CATEGORY)
         {
             
         }

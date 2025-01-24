@@ -1,7 +1,7 @@
 ﻿
 using MultiShop.Catalog.Constables.Messages.ProductImage;
 
-namespace MultiShop.Catalog.Exceptions.ProductImages
+namespace MultiShop.Catalog.Exceptions.ProductImage
 {
     public class FailGetProductImagesException : Exception
     {

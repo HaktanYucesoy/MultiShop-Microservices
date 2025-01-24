@@ -4,9 +4,9 @@ using MultiShop.Catalog.Constables.Messages.ProductDetail;
 
 namespace MultiShop.Catalog.Exceptions.ProductDetail
 {
-    public class FailUpdateProductImagesException:Exception
+    public class FailUpdateProductDetailException:Exception
     {
-        public FailUpdateProductImagesException():base(ProductDetailMessages.ERROR_OCCURED_WHILE_UPDATING_PRODUCT_DETAIL)
+        public FailUpdateProductDetailException():base(ProductDetailMessages.ERROR_OCCURED_WHILE_UPDATING_PRODUCT_DETAIL)
         {
             
         }

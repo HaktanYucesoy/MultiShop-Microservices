@@ -1,10 +1,10 @@
 ﻿using MultiShop.Catalog.Constables.Messages.ProductImage;
 
-namespace MultiShop.Catalog.Exceptions.ProductDetail
+namespace MultiShop.Catalog.Exceptions.ProductImage
 {
-    public class ProductImageNotFoundDetailException:Exception
+    public class ProductImageNotFoundException:Exception
     {
-        public ProductImageNotFoundDetailException():base(ProductImageMessages.NOT_FOUND)
+        public ProductImageNotFoundException():base(ProductImageMessages.NOT_FOUND)
         {
            
         }       

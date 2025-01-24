@@ -2,9 +2,9 @@
 
 namespace MultiShop.Catalog.Exceptions.Category
 {
-    public class FailGetProductsException : Exception
+    public class FailGetCategoriesException : Exception
     {
-        public FailGetProductsException() : base(CategoryMessages.ERROR_OCCURED_WHILE_GET_CATEGORİES)
+        public FailGetCategoriesException() : base(CategoryMessages.ERROR_OCCURED_WHILE_GET_CATEGORİES)
         {
         }
     }

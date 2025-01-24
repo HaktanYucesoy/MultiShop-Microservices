@@ -2,9 +2,9 @@
 
 namespace MultiShop.Catalog.Exceptions.Category
 {
-    public class ProductNotFoundException:Exception
+    public class CategoryNotFoundException:Exception
     {
-        public ProductNotFoundException():base(CategoryMessages.NOT_FOUND)
+        public CategoryNotFoundException():base(CategoryMessages.NOT_FOUND)
         {
            
         }

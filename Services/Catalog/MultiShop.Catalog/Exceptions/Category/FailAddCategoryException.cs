@@ -1,8 +1,8 @@
 ﻿namespace MultiShop.Catalog.Exceptions.Category
 {
-    public class FailAddProductException:Exception
+    public class FailAddCategoryException:Exception
     {
-        public FailAddProductException():base("An error occurred while adding a category")
+        public FailAddCategoryException():base("An error occurred while adding a category")
         {
             
         }

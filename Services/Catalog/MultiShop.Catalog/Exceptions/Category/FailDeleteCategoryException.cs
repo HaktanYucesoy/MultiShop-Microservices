@@ -2,9 +2,9 @@
 
 namespace MultiShop.Catalog.Exceptions.Category
 {
-    public class FailDeleteProductException:Exception
+    public class FailDeleteCategoryException:Exception
     {
-        public FailDeleteProductException():base(CategoryMessages.ERROR_OCCURED_WHILE_DELETING_CATEGORY)
+        public FailDeleteCategoryException():base(CategoryMessages.ERROR_OCCURED_WHILE_DELETING_CATEGORY)
         {
             
         }

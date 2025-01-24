@@ -2,9 +2,9 @@
 
 namespace MultiShop.Catalog.Exceptions.ProductDetail
 {
-    public class FailDeleteProductImageException:Exception
+    public class FailDeleteProductDetailException:Exception
     {
-        public FailDeleteProductImageException():base(ProductDetailMessages.ERROR_OCCURED_WHILE_DELETING_PRODUCT_DETAIL)
+        public FailDeleteProductDetailException():base(ProductDetailMessages.ERROR_OCCURED_WHILE_DELETING_PRODUCT_DETAIL)
         {
             
         }
