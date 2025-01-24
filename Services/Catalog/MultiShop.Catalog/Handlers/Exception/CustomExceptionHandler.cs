@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using MultiShop.Catalog.Exceptions.Category;
+using MultiShop.Catalog.Exceptions.Product;
 using System.Net;
 
 namespace MultiShop.Catalog.Handlers.Exception
@@ -19,6 +20,11 @@ namespace MultiShop.Catalog.Handlers.Exception
                 FailDeleteProductException=>StatusCodes.Status500InternalServerError,
                 FailGetProductsException=>StatusCodes.Status500InternalServerError,
                 FailUpdateProductException=>StatusCodes.Status500InternalServerError,
+                CategoryNotFoundException => StatusCodes.Status404NotFound,
+                FailAddCategoryException => StatusCodes.Status500InternalServerError,
+                FailDeleteCategoryException => StatusCodes.Status500InternalServerError,
+                FailGetCategoriesException => StatusCodes.Status500InternalServerError,
+                FailUpdateCategoryException => StatusCodes.Status500InternalServerError,
                 _ => StatusCodes.Status500InternalServerError
 
             };
@@ -32,12 +38,16 @@ namespace MultiShop.Catalog.Handlers.Exception
                 Instance = $"{httpContext.Request.Method} {httpContext.Request.Path}"
             };
 
-            return await problemDetailsService.TryWriteAsync(new ProblemDetailsContext()
+            var problemDetailsContext = new ProblemDetailsContext()
             {
                 HttpContext = httpContext,
                 Exception = exception,
                 ProblemDetails = problemDetails
-            });
+            };
+
+            var response=await problemDetailsService.TryWriteAsync(problemDetailsContext);
+
+            return response;
 
           
 
