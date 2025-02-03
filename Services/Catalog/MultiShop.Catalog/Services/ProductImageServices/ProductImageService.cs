@@ -12,7 +12,7 @@ namespace MultiShop.Catalog.Services.ProductImageServices
         CreateProductImageDto, UpdateProductImageDto, GetByIdProductImageDto,ProductImageDomain>, IProductImageService
     {
         public ProductImageService(IDatabaseSettings databaseSettings, IMapper mapper,
-            DomainExceptionRegistery domainExceptionRegistery) : base(databaseSettings, collectionName:databaseSettings.ProductImageCollectionName, mapper,domainExceptionRegistery,typeof(ProductImageDomain))
+            DomainExceptionRegistery domainExceptionRegistery) : base(databaseSettings, collectionName:databaseSettings.ProductImageCollectionName, mapper,domainExceptionRegistery)
         {
         }
     }

@@ -12,7 +12,7 @@ namespace MultiShop.Catalog.Services.ProductServices
         CreateProductDto, UpdateProductDto, GetByIdProductDto,ProductService>, IProductService
     {
         public ProductService(IDatabaseSettings databaseSettings,IMapper mapper, DomainExceptionRegistery domainExceptionRegistery) : base(databaseSettings, collectionName:databaseSettings.ProductCollectionName, mapper,
-            domainExceptionRegistery,typeof(ProductDomain))
+            domainExceptionRegistery)
         {
         }
     }
