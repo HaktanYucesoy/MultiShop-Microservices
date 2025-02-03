@@ -6,12 +6,15 @@
 
         public void RegisterExceptions<TDomain>(DomainExceptionMap<TDomain> map)
         {
-            _exceptionMaps[typeof(TDomain)] = map;
+            _exceptionMaps.Add(typeof(TDomain), map);
         }
 
-        public DomainExceptionMap<TDomain> GetExceptionMap<TDomain>()
+        public virtual DomainExceptionMap<TDomain> GetExceptionMap<TDomain>()
         {
-            return (DomainExceptionMap<TDomain>)_exceptionMaps[typeof(TDomain)];
+            var val=(DomainExceptionMap<TDomain>)_exceptionMaps[typeof(TDomain)];
+            return val;
         }
+
+      
     }
 }

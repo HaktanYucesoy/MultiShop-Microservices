@@ -1,4 +1,5 @@
-﻿using MultiShop.Catalog.Aspects.ExceptionHandling;
+﻿using MultiShop.Catalog.Aspects.Domains;
+using MultiShop.Catalog.Aspects.ExceptionHandling;
 using MultiShop.Catalog.Aspects.Extensions;
 using MultiShop.Catalog.Aspects.Mappings;
 using MultiShop.Catalog.Services.CategoryServices;
@@ -14,27 +15,28 @@ namespace MultiShop.Catalog.Extensions.DependencyResolvers
         public static IServiceCollection AddCatalogDependencies(this IServiceCollection services)
         {
 
+            var registry = new DomainExceptionRegistery();
+
+            // Domain exception mapping'leri kaydet
+            registry.RegisterExceptions(CategoryExceptionMapping.GetExceptionMap());
+            registry.RegisterExceptions(ProductExceptionMapping.GetExceptionMap());
+            registry.RegisterExceptions(ProductDetailExceptionMapping.GetExceptionMap());
+            registry.RegisterExceptions(ProductImageExceptionMapping.GetExceptionMap());
+
+            // Registry'i singleton olarak ekle
+            services.AddSingleton(registry);
+
+            // Servisleri ekle
             services.AddDomainService<CategoryDomain, ICategoryService, CategoryService>(
-                CategoryExceptionMapping.GetExceptionMap());
-
+                registry.GetExceptionMap<CategoryDomain>());
             services.AddDomainService<ProductDomain, IProductService, ProductService>(
-                ProductExceptionMapping.GetExceptionMap());
-
+                registry.GetExceptionMap<ProductDomain>());
             services.AddDomainService<ProductDetailDomain, IProductDetailService, ProductDetailService>(
-                ProductDetailExceptionMapping.GetExceptionMap());
-
-            services.AddDomainService<ProductImageDomain, IProductImageService, ProductImageService>(ProductImageExceptionMapping.GetExceptionMap());
-
-            //services.AddScoped<ICategoryService, CategoryService>();
-            //services.AddScoped<IProductService, ProductService>();
-            //services.AddScoped<IProductImageService, ProductImageService>();
-            //services.AddScoped<IProductDetailService, ProductDetailService>();
-            //services.AddScoped<DomainExceptionRegistery>();
-
+                registry.GetExceptionMap<ProductDetailDomain>());
+            services.AddDomainService<ProductImageDomain, IProductImageService, ProductImageService>(
+                registry.GetExceptionMap<ProductImageDomain>());
 
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
-
-           
 
             return services;
         }

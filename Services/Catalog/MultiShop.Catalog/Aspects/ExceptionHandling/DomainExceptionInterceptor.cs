@@ -39,7 +39,8 @@ namespace MultiShop.Catalog.Aspects.ExceptionHandling
             {
                 if (t.IsFaulted)
                 {
-                    throw GetDomainException(invocation.Method.Name);
+                    var exception=GetDomainException(invocation.Method.Name);
+                    throw exception;
                 }
             });
         }
@@ -56,7 +57,8 @@ namespace MultiShop.Catalog.Aspects.ExceptionHandling
                 _ => typeof(Exception)
             };
 
-            return (Exception)Activator.CreateInstance(exceptionType)!;
+            var exceptionInstance=(Exception)Activator.CreateInstance(exceptionType)!;
+            return exceptionInstance;
         }
     }
 }

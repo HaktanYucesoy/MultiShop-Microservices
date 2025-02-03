@@ -11,10 +11,8 @@ namespace MultiShop.Catalog.Aspects.Extensions
         where TService : class
         where TImplementation : class, TService
         {
-            var registry = new DomainExceptionRegistery();
-            registry.RegisterExceptions(exceptionMap);
 
-            services.AddSingleton(registry);
+            var registry = services.BuildServiceProvider().GetRequiredService<DomainExceptionRegistery>();
             services.AddScoped<TImplementation>();
             services.AddScoped(provider =>
             {
