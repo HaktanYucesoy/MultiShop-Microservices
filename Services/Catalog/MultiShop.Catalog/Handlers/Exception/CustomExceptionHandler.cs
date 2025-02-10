@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http.Features;
-using Microsoft.AspNetCore.Mvc;
-using MultiShop.Catalog.Entities;
 using MultiShop.Catalog.Exceptions.Category;
 using MultiShop.Catalog.Exceptions.Product;
 using MultiShop.Catalog.Exceptions.ProductDetail;
