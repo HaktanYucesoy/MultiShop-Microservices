@@ -1,9 +1,8 @@
-﻿
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 
-namespace MultiShop.Order.Application.Interfaces
+namespace MultiShop.Order.Application.Interfaces.Repositories
 {
-    public interface IRepository<T,TId> where T:class
+    public interface IRepository<T, TId> where T : class
 
     {
         Task<List<T>> GetAllAsync();

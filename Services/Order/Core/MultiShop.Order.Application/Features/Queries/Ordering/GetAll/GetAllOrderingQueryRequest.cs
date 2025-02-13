@@ -2,7 +2,7 @@
 
 namespace MultiShop.Order.Application.Features.Queries.Ordering.GetAll
 {
-    public class GetAllOrderingQueryRequest:IRequest<GetAllOrderingQueryResponse>
+    public class GetAllOrderingQueryRequest:IRequest<List<GetAllOrderingQueryResponse>>
     {
     }
 }
