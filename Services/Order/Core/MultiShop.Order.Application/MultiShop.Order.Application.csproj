@@ -10,12 +10,4 @@
     <PackageReference Include="MediatR" Version="12.4.1" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\Commands\OrderDetail\" />
-    <Folder Include="Features\Commands\Ordering\" />
-    <Folder Include="Features\Queries\Ordering\GetAll\" />
-    <Folder Include="Features\Queries\Ordering\GetById\" />
-    <Folder Include="Features\Queries\Ordering\GetByUserId\" />
-  </ItemGroup>
-
 </Project>
