@@ -18,7 +18,7 @@ namespace MultiShop.Discount.Context
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            string connectionString = "Server=HAKTANPC;initial Catalog=MultiShopDiscountDb;integrated Security=true;TrustServerCertificate=True";
+            string connectionString = "Server=YourServer;initial Catalog=MultiShopDiscountDb;integrated Security=true;TrustServerCertificate=True";
 
             optionsBuilder.UseSqlServer(connectionString);
         }
