@@ -25,7 +25,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiShop.Order.Domain", "S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiShop.Order.Application", "Services\Order\Core\MultiShop.Order.Application\MultiShop.Order.Application.csproj", "{1C7C1916-E18C-408C-A86A-3BB066353F64}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiShop.Infrastructure.Persistence", "Services\Order\Infrastructure\MultiShop.Infrastructure.Persistence\MultiShop.Infrastructure.Persistence.csproj", "{0CFDD4C2-0E12-44B8-A827-AC128CA68B01}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiShop.Order.Infrastructure.Persistence", "Services\Order\Infrastructure\MultiShop.Infrastructure.Persistence\MultiShop.Order.Infrastructure.Persistence.csproj", "{0CFDD4C2-0E12-44B8-A827-AC128CA68B01}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiShop.Order.WebApi", "Services\Order\Presentation\MultiShop.Order.WebApi\MultiShop.Order.WebApi.csproj", "{B122920D-0278-436D-A32C-8F698994355D}"
 EndProject
