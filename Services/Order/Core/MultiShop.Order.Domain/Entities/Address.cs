@@ -4,12 +4,26 @@ namespace MultiShop.Order.Domain.Entities
 {
     public class Address:BaseEntity<int>
     {
-        public string UserId { get; set; }
+        public string UserId { get; private set; }
+        public string District { get; private set; }
+        public string City { get; private set; }
+        public string Detail { get; private set; }
 
-        public string District { get; set; }
+        private Address() { }
 
-        public string City { get; set; }
+        public static Address Create(string userId, string district,
+            string city, string detail)
+        {
+            if (string.IsNullOrEmpty(userId))
+                throw new ArgumentException("UserId cannot be empty");
 
-        public string Detail { get; set; }
+            return new Address
+            {
+                UserId = userId,
+                District = district,
+                City = city,
+                Detail = detail
+            };
+        }
     }
 }
