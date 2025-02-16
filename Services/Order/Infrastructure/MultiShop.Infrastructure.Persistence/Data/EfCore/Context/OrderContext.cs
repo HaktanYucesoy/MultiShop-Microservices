@@ -8,7 +8,7 @@ namespace MultiShop.Order.Infrastructure.Persistence.Data.EfCore.Context
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=HAKTANPC;Database=MultiShopOrderDb;Trusted_Connection=True;TrustServerCertificate=True");
+            optionsBuilder.UseSqlServer("Server=YourServer;Database=MultiShopOrderDb;Trusted_Connection=True;TrustServerCertificate=True");
         }
 
         public DbSet<Address> Addresses { get; set; }
