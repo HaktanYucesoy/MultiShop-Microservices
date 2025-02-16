@@ -17,13 +17,12 @@ namespace MultiShop.Order.Application.Features.Commands.Address.Create
         }
         public async Task<CreateAddressCommandResponse> Handle(CreateAddressCommandRequest request, CancellationToken cancellationToken)
         {
-            var response=await _addressRepository.AddAsync(new Domain.Entities.Address
-            {
-                UserId = request.UserId,
-                City = request.City,
-                District = request.District,
-                Detail = request.Detail
-            });
+            var newAddress= Domain.Entities.Address.Create(request.UserId,
+                request.District, 
+                request.City,
+                request.Detail);
+
+            var response=await _addressRepository.AddAsync(newAddress);
 
             return _mapper.Map<CreateAddressCommandResponse>(response);
         }
