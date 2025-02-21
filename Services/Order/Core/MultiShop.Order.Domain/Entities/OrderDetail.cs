@@ -32,7 +32,7 @@ namespace MultiShop.Order.Domain.Entities
             Ordering = ordering;
         }
 
-        public void UpdateDetails(int newAmount, decimal newPrice,string newName,string newImage)
+        public void UpdateDetails(int newAmount, decimal newPrice,string newName,string newImage,int orderingId)
         {
             if (newAmount <= 0)
                 throw new OrderDetailDomainRuleException("Amount must be greater than zero");
@@ -47,6 +47,7 @@ namespace MultiShop.Order.Domain.Entities
             ProductPrice = newPrice;
             ProductImage = newImage;
             ProductName = newName;
+            OrderingId = orderingId;
             CalculateTotalPrice();
         }
 
