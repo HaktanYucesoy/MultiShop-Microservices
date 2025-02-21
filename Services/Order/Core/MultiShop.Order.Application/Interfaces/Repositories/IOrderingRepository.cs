@@ -10,5 +10,7 @@ namespace MultiShop.Order.Application.Interfaces.Repositories
         Task<Ordering> GetOrderingWithOrderDetails(int id);
 
         Task<Ordering> GetOrderingWithOrderDetailsAndAddress(int id);
+
+        Task<bool> DeleteOrderWithDetails(int id);
     }
 }
