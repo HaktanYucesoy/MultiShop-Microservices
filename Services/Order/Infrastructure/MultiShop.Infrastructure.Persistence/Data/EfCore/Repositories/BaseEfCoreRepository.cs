@@ -56,13 +56,22 @@ namespace MultiShop.Order.Infrastructure.Persistence.Data.EfCore.Repositories
             if (filter == null)
                 throw new ArgumentNullException(nameof(filter));
 
-            return await _orderContext.Set<T>()
+            var response=await _orderContext.Set<T>()
                 .FirstOrDefaultAsync(filter);
+
+            if (response == null)
+                return null!;
+
+            return response;
         }
 
         public async Task<T> GetByIdAsync(int id)
         {
-            return await _orderContext.Set<T>().FindAsync(id);
+            var response= await _orderContext.Set<T>().FindAsync(id);
+            if (response == null)
+                return null!;
+
+            return response;
         }
 
         public virtual async Task<T> GetByIdWithIncludesAsync(int id, params Expression<Func<T, object>>[] includes)
@@ -75,7 +84,11 @@ namespace MultiShop.Order.Infrastructure.Persistence.Data.EfCore.Repositories
                     current.Include(include));
             }
 
-            return await query.FirstOrDefaultAsync(e => e.Id == id);
+            var response= await query.FirstOrDefaultAsync(e => e.Id == id);
+            if (response == null)
+                return null!;
+
+            return response;
         }
 
         public async Task<IReadOnlyList<T>> GetListByFilterAsync(Expression<Func<T, bool>> filter, params Expression<Func<T, object>>[] includes)
@@ -123,7 +136,7 @@ namespace MultiShop.Order.Infrastructure.Persistence.Data.EfCore.Repositories
             var existingEntity = await query.FirstOrDefaultAsync(e => e.Id == entity.Id);
 
             if (existingEntity == null)
-                return null;
+                return null!;
 
             _orderContext.Entry(existingEntity).CurrentValues.SetValues(entity);
             await _orderContext.SaveChangesAsync();
