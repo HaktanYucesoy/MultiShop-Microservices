@@ -2,7 +2,7 @@
 
 namespace MultiShop.Order.Application.Interfaces.UnitOfWork
 {
-    public interface IUnitOfWork
+    public interface IUnitOfWork:IDisposable
     {
         Task<ITransaction> BeginTransactionAsync(CancellationToken cancellationToken = default);
         Task CommitTransactionAsync(CancellationToken cancellationToken = default);
