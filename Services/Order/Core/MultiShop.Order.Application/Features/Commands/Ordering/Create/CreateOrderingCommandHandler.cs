@@ -2,7 +2,6 @@
 using MediatR;
 using MultiShop.Order.Application.Exceptions.Common;
 using MultiShop.Order.Application.Interfaces.Repositories;
-using MultiShop.Order.Domain.Entities;
 
 namespace MultiShop.Order.Application.Features.Commands.Ordering.Create
 {

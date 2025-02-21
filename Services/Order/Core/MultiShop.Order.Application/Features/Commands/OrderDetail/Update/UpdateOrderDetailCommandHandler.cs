@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using MultiShop.Order.Application.Exceptions.Common;
 using MultiShop.Order.Application.Interfaces.Repositories;
 
 namespace MultiShop.Order.Application.Features.Commands.OrderDetail.Update
@@ -18,19 +19,21 @@ namespace MultiShop.Order.Application.Features.Commands.OrderDetail.Update
 
         public async Task<UpdateOrderDetailCommandResponse> Handle(UpdateOrderDetailCommandRequest request, CancellationToken cancellationToken)
         {
-            var updateResponse = await _orderDetailRepository.UpdateAsync(new Domain.Entities.OrderDetail()
-            {
-                Id = request.Id,
-                ProductId = request.ProductId,
-                ProductAmount = request.ProductAmount,
-                ProductPrice = request.ProductPrice,
-                ProductName = request.ProductName,
-                ProductImage = request.ProductImage,
-                ProductTotalPrice = request.ProductTotalPrice,
-                OrderingId = request.OrderingId
-            });
+            var existingOrderDetail = await _orderDetailRepository.GetByIdAsync(request.Id);
+            if (existingOrderDetail == null)
+                throw new NotFoundException(nameof(OrderDetail), request.Id);
 
-            return _mapper.Map<UpdateOrderDetailCommandResponse>(updateResponse);
+            existingOrderDetail.UpdateDetails(
+                request.ProductAmount,
+                request.ProductPrice,
+                request.ProductName,
+                request.ProductImage,
+                request.OrderingId
+            );
+
+
+            var updatedOrderDetail = await _orderDetailRepository.UpdateAsync(existingOrderDetail);
+            return _mapper.Map<UpdateOrderDetailCommandResponse>(updatedOrderDetail);
         }
     }
 }

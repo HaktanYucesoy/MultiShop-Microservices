@@ -1,10 +1,9 @@
-﻿
-
-using MediatR;
+﻿using MediatR;
+using MultiShop.Order.Application.Interfaces.Transaction;
 
 namespace MultiShop.Order.Application.Features.Commands.OrderDetail.Create
 {
-    public class CreateOrderDetailCommandRequest:IRequest<CreateOrderDetailCommandResponse>
+    public class CreateOrderDetailCommandRequest:IRequest<CreateOrderDetailCommandResponse>,ITransactionalCommand
     {
         public string ProductId { get; set; }
         public int ProductAmount { get; set; }

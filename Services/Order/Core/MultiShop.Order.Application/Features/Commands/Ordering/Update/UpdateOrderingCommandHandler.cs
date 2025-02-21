@@ -21,20 +21,20 @@ namespace MultiShop.Order.Application.Features.Commands.Ordering.Update
 
             var existingOrdering = await _orderingRepository.GetByIdAsync(request.Id);
             if (existingOrdering == null)
-                throw new NotFoundException(nameof(Ordering),request.Id);
+                throw new NotFoundException(nameof(Ordering), request.Id);
 
             try
             {
                 var newDeliveryAddress = request.DeliveryAddress;
-                var newOrderDetails=request.OrderDetails;
+                var newOrderDetails = request.OrderDetails;
                 if (newDeliveryAddress != null)
-                {                 
-                    existingOrdering.UpdateDeliveryAddress(newDeliveryAddress.District,newDeliveryAddress.City,newDeliveryAddress.Detail);
+                {
+                    existingOrdering.UpdateDeliveryAddress(newDeliveryAddress.District, newDeliveryAddress.City, newDeliveryAddress.Detail);
                 }
 
                 if (newOrderDetails != null)
                 {
-                    foreach(var orderDetail in newOrderDetails)
+                    foreach (var orderDetail in newOrderDetails)
                     {
                         existingOrdering.UpdateOrderDetail(orderDetail.Id,
                             orderDetail.ProductAmount,
@@ -44,11 +44,17 @@ namespace MultiShop.Order.Application.Features.Commands.Ordering.Update
                     }
                 }
 
-                var updatedOrdering = await _orderingRepository.UpdateAsync(existingOrdering);
+                var updatedOrdering = await _orderingRepository.UpdateOrderWithUpdatedToNewOrderDetailsAndAddress(existingOrdering,
+                    existingOrdering.OrderDetails.ToList(),existingOrdering.DeliveryAddress);
 
                 return _mapper.Map<UpdateOrderingCommandResponse>(updatedOrdering);
 
 
             }
+            catch(Exception ex)
+            {
+                throw new UpdateFailureException(nameof(Ordering), request.Id, ex.Message);
+            }
+        }
     }
 }

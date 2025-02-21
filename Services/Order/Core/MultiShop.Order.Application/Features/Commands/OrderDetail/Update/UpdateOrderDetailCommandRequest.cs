@@ -4,7 +4,7 @@ namespace MultiShop.Order.Application.Features.Commands.OrderDetail.Update
 {
     public class UpdateOrderDetailCommandRequest : IRequest<UpdateOrderDetailCommandResponse>
     {
-        public UpdateOrderDetailCommandRequest(int id, string productId, int productAmount, decimal productPrice, string productName, string productImage, decimal productTotalPrice, int orderingId)
+        public UpdateOrderDetailCommandRequest(int id, string productId, int productAmount, decimal productPrice, string productName, string productImage, int orderingId)
         {
             Id = id;
             ProductId = productId;
@@ -12,8 +12,6 @@ namespace MultiShop.Order.Application.Features.Commands.OrderDetail.Update
             ProductPrice = productPrice;
             ProductName = productName;
             ProductImage = productImage;
-            ProductTotalPrice = productTotalPrice;
-            OrderingId = orderingId;
         }
         public int Id { get; set; }
         public string ProductId { get; set; }
@@ -21,7 +19,6 @@ namespace MultiShop.Order.Application.Features.Commands.OrderDetail.Update
         public decimal ProductPrice { get; set; }
         public string ProductName { get; set; }
         public string ProductImage { get; set; }
-        public decimal ProductTotalPrice { get; set; }
         public int OrderingId { get; set; }
     }
 }

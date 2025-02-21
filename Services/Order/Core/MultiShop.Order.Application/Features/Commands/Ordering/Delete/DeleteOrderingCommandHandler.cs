@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using MultiShop.Order.Application.Exceptions.Common;
 using MultiShop.Order.Application.Interfaces.Repositories;
 
 namespace MultiShop.Order.Application.Features.Commands.Ordering.Delete
@@ -15,11 +16,20 @@ namespace MultiShop.Order.Application.Features.Commands.Ordering.Delete
 
         public async Task<DeleteOrderingCommandResponse> Handle(DeleteOrderingCommandRequest request, CancellationToken cancellationToken)
         {
-            var deleteResponse = await _orderingRepository.DeleteAsync(request.Id);
-            return new DeleteOrderingCommandResponse()
+            try
             {
-                IsSuccess = deleteResponse
-            };
+                var deleteResponse = await _orderingRepository.DeleteOrderWithDetails(request.Id);
+                return new DeleteOrderingCommandResponse()
+                {
+                    IsSuccess = deleteResponse
+                };
+            }
+
+            catch(Exception ex)
+            {
+                throw new DeleteFailureException(nameof(Ordering), request.Id, ex.Message);
+            }
+
         }
     }
 }
