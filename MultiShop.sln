@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiShop.Order.Infrastruct
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiShop.Order.WebApi", "Services\Order\Presentation\MultiShop.Order.WebApi\MultiShop.Order.WebApi.csproj", "{B122920D-0278-436D-A32C-8F698994355D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiShop.Order.Infrastructure", "Services\Order\Infrastructure\MultiShop.Infrastructure\MultiShop.Order.Infrastructure.csproj", "{CCA819A1-3C82-4C0F-85D2-2AE648C66A84}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,6 +61,10 @@ Global
 		{B122920D-0278-436D-A32C-8F698994355D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B122920D-0278-436D-A32C-8F698994355D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B122920D-0278-436D-A32C-8F698994355D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CCA819A1-3C82-4C0F-85D2-2AE648C66A84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CCA819A1-3C82-4C0F-85D2-2AE648C66A84}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CCA819A1-3C82-4C0F-85D2-2AE648C66A84}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CCA819A1-3C82-4C0F-85D2-2AE648C66A84}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -76,5 +82,6 @@ Global
 		{1C7C1916-E18C-408C-A86A-3BB066353F64} = {858F84CE-F38F-419D-86DA-832CC48D269B}
 		{0CFDD4C2-0E12-44B8-A827-AC128CA68B01} = {04C0FC44-5941-4DB1-AA01-C8B85E6B4CD2}
 		{B122920D-0278-436D-A32C-8F698994355D} = {F7CAD78E-53B9-4609-91A6-7D70E60BB4E7}
+		{CCA819A1-3C82-4C0F-85D2-2AE648C66A84} = {04C0FC44-5941-4DB1-AA01-C8B85E6B4CD2}
 	EndGlobalSection
 EndGlobal
