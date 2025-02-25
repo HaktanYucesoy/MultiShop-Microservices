@@ -61,7 +61,7 @@ namespace MultiShop.Order.Domain.Entities
             if (orderDetail == null)
                 throw new OrderDetailDomainNotFoundException(orderDetailId);
 
-            orderDetail.UpdateDetails(newAmount, newPrice,newProductName,newProductImage);
+            orderDetail.UpdateDetails(newAmount, newPrice,newProductName,newProductImage,orderDetailId);
             orderDetail.Id = orderDetailId;
             RecalculateTotalPrice();
         }
