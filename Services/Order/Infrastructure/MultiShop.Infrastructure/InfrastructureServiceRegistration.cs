@@ -1,8 +1,13 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MultiShop.Order.Application.Interfaces.Logging;
+using MultiShop.Order.Application.Interfaces.Logging.Strategies.Database;
+using MultiShop.Order.Infrastructure.Logging;
+using MultiShop.Order.Infrastructure.Logging.Nlog;
+using MultiShop.Order.Infrastructure.Logging.Nlog.Factories;
 using MultiShop.Order.Infrastructure.Logging.Serilog;
 using MultiShop.Order.Infrastructure.Logging.Serilog.Factory;
+using MultiShop.Order.Infrastructure.Logging.Strategies.Database;
 using Serilog;
 
 namespace MultiShop.Infrastructure
@@ -15,17 +20,69 @@ namespace MultiShop.Infrastructure
         {
             services.AddSingleton<ISerilogSinkFactory>(sp =>
                 new FileSinkFactory(
-                    configuration["Serilog:File:Path"]!,
-                    configuration["Serilog:File:Template"]!
+                    configuration["Logging:Serilog:File:Path"]!,
+                    configuration["Logging:Serilog:File:Template"]!
                 ));
 
             services.AddSingleton<ISerilogSinkFactory>(sp=> 
                   new MsSqlServerSinkFactory(
-                     configuration["Serilog:SqlServer:ConnectionString"]!,
-                     configuration["Serilog:SqlServer:TableName"]!
+                     configuration["Logging:Serilog:SqlServer:ConnectionString"]!,
+                     configuration["Logging:Serilog:SqlServer:TableName"]!
                   ));
 
             services.AddScoped<ILogHandler, SerilogLogHandler>();
+
+
+            var dbProvider = configuration.GetValue<string>("Logging:NLog:DatabaseProvider");
+            if (!String.IsNullOrEmpty(dbProvider))
+            {
+                switch (dbProvider.ToLowerInvariant())
+                {
+                    case "mssql":
+                        services.AddSingleton<IDbLogStorageStrategy, MSSQLDbLogStorageStrategy>(sp =>
+                        {
+                            return new MSSQLDbLogStorageStrategy(
+                                configuration.GetValue<string>("Logging:NLog:MSSQL:ConnectionString")!,
+                                configuration.GetValue<string>("Logging:NLog:MSSQL:TableName")!);
+                            
+                        });
+                        break;
+
+                    case "mongodb":
+                        services.AddSingleton<IDbLogStorageStrategy, MongoDbLogStorageStrategy>(sp =>
+                        {
+                            return new MongoDbLogStorageStrategy(
+                                configuration.GetValue<string>("Logging:NLog:MongoDB:ConnectionString")!,
+                                configuration.GetValue<string>("Logging:NLog:MongoDB:DatabaseName")!,
+                                configuration.GetValue<string>("Logging:NLog:MongoDB:CollectionName")!);
+                        });
+                        break;
+
+                    case "redis":
+                        services.AddSingleton<IDbLogStorageStrategy, RedisDbLogStorageStrategy>(sp =>
+                        {
+                            return new RedisDbLogStorageStrategy(
+                                configuration.GetValue<string>("Logging:NLog:Redis:ConnectionString")!,
+                                configuration.GetValue<string>("Logging:NLog:Redis:KeyPrefix")!);
+                        });
+                        break;
+
+                    default:
+                        break;
+
+
+                }
+
+                services.AddSingleton<INLogFactory, DatabaseNLogFactory>(sp =>
+                {
+                    var dbStrategy = sp.GetRequiredService<IDbLogStorageStrategy>();
+                    return new DatabaseNLogFactory(dbStrategy,NLog.LogLevel.Info);
+                });
+
+                services.AddScoped<ILogHandler, NlogLogHandler>();
+            }
+
+            services.AddScoped<ILoggerService, LoggerService>();
 
             return services;
         }
