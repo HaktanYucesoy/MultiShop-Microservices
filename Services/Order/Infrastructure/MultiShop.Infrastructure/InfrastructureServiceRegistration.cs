@@ -30,6 +30,15 @@ namespace MultiShop.Infrastructure
                      configuration["Logging:Serilog:SqlServer:TableName"]!
                   ));
 
+
+            services.AddSingleton<ISerilogSinkFactory>(sp =>
+                  new ElasticSearchSinkFactory(
+                      configuration["ElasticSettings:Uri"]!,
+                      configuration["ElasticSettings:FailureSinkPath"]!,
+                      configuration["ElasticSettings:UserName"]!,
+                      configuration["ElasticSettings:Password"]!
+                  ));
+
             services.AddScoped<ILogHandler, SerilogLogHandler>();
 
 
