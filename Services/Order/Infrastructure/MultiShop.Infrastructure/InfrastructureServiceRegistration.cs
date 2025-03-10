@@ -10,30 +10,30 @@ using MultiShop.Order.Infrastructure.Logging.Serilog.Factory;
 using MultiShop.Order.Infrastructure.Logging.Strategies.Database;
 using Serilog;
 
-namespace MultiShop.Infrastructure
+namespace MultiShop.Order.Infrastructure
 {
     public static class InfrastructureServiceRegistration
     {
         public static IServiceCollection AddInfrastructureServices(
-            this IServiceCollection services,
-            IConfiguration configuration)
+            this IServiceCollection services)
         {
+            var configuration=services.BuildServiceProvider().GetService<IConfiguration>();
             services.AddSingleton<ISerilogSinkFactory>(sp =>
                 new FileSinkFactory(
-                    configuration["Logging:Serilog:File:Path"]!,
+                    configuration!["Logging:Serilog:File:Path"]!,
                     configuration["Logging:Serilog:File:Template"]!
                 ));
 
             services.AddSingleton<ISerilogSinkFactory>(sp=> 
                   new MsSqlServerSinkFactory(
-                     configuration["Logging:Serilog:SqlServer:ConnectionString"]!,
+                     configuration!["Logging:Serilog:SqlServer:ConnectionString"]!,
                      configuration["Logging:Serilog:SqlServer:TableName"]!
                   ));
 
 
             services.AddSingleton<ISerilogSinkFactory>(sp =>
                   new ElasticSearchSinkFactory(
-                      configuration["ElasticSettings:Uri"]!,
+                      configuration!["ElasticSettings:Uri"]!,
                       configuration["ElasticSettings:FailureSinkPath"]!,
                       configuration["ElasticSettings:UserName"]!,
                       configuration["ElasticSettings:Password"]!
@@ -42,7 +42,7 @@ namespace MultiShop.Infrastructure
             services.AddScoped<ILogHandler, SerilogLogHandler>();
 
 
-            var dbProvider = configuration.GetValue<string>("Logging:NLog:DatabaseProvider");
+            var dbProvider = configuration!.GetValue<string>("Logging:NLog:DatabaseProvider");
             if (!String.IsNullOrEmpty(dbProvider))
             {
                 switch (dbProvider.ToLowerInvariant())
@@ -100,6 +100,7 @@ namespace MultiShop.Infrastructure
             this IServiceCollection services,
             IConfiguration configuration)
         {
+
             var logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(configuration)
                 .CreateLogger();
