@@ -40,7 +40,6 @@ namespace MultiShop.Order.Infrastructure.Logging.Serilog.Factory
                                    EmitEventFailureHandling.WriteToFailureSink |
                                    EmitEventFailureHandling.RaiseCallback|
                                    EmitEventFailureHandling.ThrowException,
-                FailureSink=new FileSink(failureSinkPath,new JsonFormatter(),null,null),
                 FailureCallback = (e,ex) =>
                 {
                     Console.WriteLine("Unable to submit event " + e.MessageTemplate);
