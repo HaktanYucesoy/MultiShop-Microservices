@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MultiShop.Order.Application.Interfaces.Repositories;
@@ -15,12 +16,14 @@ namespace MultiShop.Order.Infrastructure.Persistence
     {
         public static IServiceCollection AddPersistenceService(this IServiceCollection services,IConfiguration configuration)
         {
+
             services.AddDbContext<OrderContext>(options =>
             {
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
-            });         
-            services.AddScoped<ITransaction, EfCoreTransaction>();
-            services.AddScoped<IUnitOfWork, EfCoreUnitOfWork>();
+
+            });
+            services.AddScoped<ITransaction, EfCoreTransaction<OrderContext>>();
+            services.AddScoped<IUnitOfWork, EfCoreUnitOfWork<OrderContext>>();
             services.AddScoped<IOrderingRepository, EfCoreOrderingRepository>();
             services.AddScoped<IOrderDetailRepository, EfCoreOrderDetailRepository>();
             services.AddScoped<IAddressRepository, EfCoreAddressRepository>();
