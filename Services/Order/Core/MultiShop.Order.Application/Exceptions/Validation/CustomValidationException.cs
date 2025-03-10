@@ -2,16 +2,11 @@
 {
     public class CustomValidationException:Exception
     {
-
+        public IReadOnlyCollection<ValidationError> Errors { get; set; }
         public CustomValidationException(IReadOnlyCollection<ValidationError> errors):
             base("Validation fail")
         {
-
-        }
-
-        public CustomValidationException(ValidationError error):base("Validation Fail")
-        {
-
+            this.Errors = errors;
         }
     }
 

@@ -23,15 +23,9 @@ namespace MultiShop.Order.Application.Behaviors
 
             if (errors.Any())
             {
-                if (errors.Count == 1)
-                {
-                    throw new CustomValidationException(errors.FirstOrDefault()!);
-                }
-
-                else
-                {
-                    throw new CustomValidationException(errors);
-                }
+               
+                throw new CustomValidationException(errors);
+                
                
             }
 
