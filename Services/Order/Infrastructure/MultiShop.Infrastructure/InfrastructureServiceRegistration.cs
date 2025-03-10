@@ -8,6 +8,8 @@ using MultiShop.Order.Infrastructure.Logging.Nlog.Factories;
 using MultiShop.Order.Infrastructure.Logging.Serilog;
 using MultiShop.Order.Infrastructure.Logging.Serilog.Factory;
 using MultiShop.Order.Infrastructure.Logging.Strategies.Database;
+using MultiShop.Order.Infrastructure.SearchEngine.ElasticSearch.Implemantations;
+using MultiShop.Order.Infrastructure.SearchEngine.ElasticSearch.Interfaces;
 using Serilog;
 
 namespace MultiShop.Order.Infrastructure
@@ -20,15 +22,15 @@ namespace MultiShop.Order.Infrastructure
             var configuration=services.BuildServiceProvider().GetService<IConfiguration>();
             services.AddSingleton<ISerilogSinkFactory>(sp =>
                 new FileSinkFactory(
-                    configuration!["Logging:Serilog:File:Path"]!,
-                    configuration["Logging:Serilog:File:Template"]!
-                ));
+                configuration!["Logging:Serilog:WriteTo:0:Args:path"]!,
+                configuration!["Logging:Serilog:WriteTo:0:Args:outputTemplate"]!
+              ));
 
-            services.AddSingleton<ISerilogSinkFactory>(sp=> 
-                  new MsSqlServerSinkFactory(
-                     configuration!["Logging:Serilog:SqlServer:ConnectionString"]!,
-                     configuration["Logging:Serilog:SqlServer:TableName"]!
-                  ));
+            services.AddSingleton<ISerilogSinkFactory>(sp =>
+                new MsSqlServerSinkFactory(
+                    configuration!["Logging:Serilog:WriteTo:2:Args:connectionString"]!,
+                    configuration!["Logging:Serilog:WriteTo:2:Args:tableName"]!
+                ));
 
 
             services.AddSingleton<ISerilogSinkFactory>(sp =>
@@ -76,6 +78,8 @@ namespace MultiShop.Order.Infrastructure
                         });
                         break;
 
+                    
+
                     default:
                         break;
 
@@ -92,6 +96,8 @@ namespace MultiShop.Order.Infrastructure
             }
 
             services.AddScoped<ILoggerService, LoggerService>();
+
+            services.AddScoped<ILogDetailElasticSearchEngineService,LogDetailElasticSearchEngineService>();
 
             return services;
         }
