@@ -28,6 +28,11 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiShop.Order.Infrastructure.Persistence", "Services\Order\Infrastructure\MultiShop.Infrastructure.Persistence\MultiShop.Order.Infrastructure.Persistence.csproj", "{0CFDD4C2-0E12-44B8-A827-AC128CA68B01}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiShop.Order.WebApi", "Services\Order\Presentation\MultiShop.Order.WebApi\MultiShop.Order.WebApi.csproj", "{B122920D-0278-436D-A32C-8F698994355D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0CFDD4C2-0E12-44B8-A827-AC128CA68B01} = {0CFDD4C2-0E12-44B8-A827-AC128CA68B01}
+		{1C7C1916-E18C-408C-A86A-3BB066353F64} = {1C7C1916-E18C-408C-A86A-3BB066353F64}
+		{CCA819A1-3C82-4C0F-85D2-2AE648C66A84} = {CCA819A1-3C82-4C0F-85D2-2AE648C66A84}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiShop.Order.Infrastructure", "Services\Order\Infrastructure\MultiShop.Infrastructure\MultiShop.Order.Infrastructure.csproj", "{CCA819A1-3C82-4C0F-85D2-2AE648C66A84}"
 EndProject
