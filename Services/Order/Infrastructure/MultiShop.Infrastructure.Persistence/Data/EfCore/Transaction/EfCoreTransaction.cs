@@ -1,21 +1,30 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage;
 using MultiShop.Order.Application.Interfaces.Transaction;
+using MultiShop.Order.Infrastructure.Persistence.Data.EfCore.Context;
 
 
 namespace MultiShop.Order.Infrastructure.Persistence.Data.EfCore.Transaction
 {
-    public class EfCoreTransaction : ITransaction
+    public class EfCoreTransaction<TContext>:ITransaction
+        where TContext:DbContext
     {
-        private readonly IDbContextTransaction _transaction;
-
-        public EfCoreTransaction(IDbContextTransaction transaction)
+        private TContext _context;
+        public IDbContextTransaction _transaction { get; set; }
+        public EfCoreTransaction(TContext context)
         {
-            _transaction = transaction;
+            _context= context;
+            _transaction = _context.Database.BeginTransaction();
         }
 
         public async Task CommitAsync(CancellationToken cancellationToken = default)
         {
-            await _transaction.CommitAsync(cancellationToken);
+            if(_transaction!=null && !String.IsNullOrEmpty(_transaction.TransactionId.ToString()))
+            {
+                await _transaction.CommitAsync(cancellationToken);
+            }
+                
         }
 
         public void Dispose()
@@ -25,7 +34,10 @@ namespace MultiShop.Order.Infrastructure.Persistence.Data.EfCore.Transaction
 
         public async Task RollbackAsync(CancellationToken cancellationToken = default)
         {
-            await _transaction.RollbackAsync(cancellationToken);
+            if (_transaction != null && !String.IsNullOrEmpty(_transaction.TransactionId.ToString()))
+            {
+                await _transaction.RollbackAsync(cancellationToken);
+            }          
         }
     }
 }

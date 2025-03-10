@@ -1,30 +1,36 @@
-﻿using MultiShop.Order.Application.Interfaces.Transaction;
+﻿using Microsoft.EntityFrameworkCore;
+using MultiShop.Order.Application.Interfaces.Transaction;
 using MultiShop.Order.Application.Interfaces.UnitOfWork;
-using MultiShop.Order.Infrastructure.Persistence.Data.EfCore.Context;
 using MultiShop.Order.Infrastructure.Persistence.Data.EfCore.Transaction;
 
 
 namespace MultiShop.Order.Infrastructure.Persistence.Data.EfCore.UnitOfWork
 {
-    public class EfCoreUnitOfWork : IUnitOfWork
+    public class EfCoreUnitOfWork<TContext> : IUnitOfWork
+        where TContext:DbContext
     {
-        private readonly OrderContext _dbContext;
+        private readonly TContext _dbContext;
+        private EfCoreTransaction<TContext> _efCoreTransaction;
         private bool _disposed = false;
-        public EfCoreUnitOfWork(OrderContext dbContext)
+        public EfCoreUnitOfWork(TContext dbContext)
         {
             _dbContext = dbContext;
         }
 
         public async Task<ITransaction> BeginTransactionAsync(CancellationToken cancellationToken = default)
         {
-            var transaction=await _dbContext.Database.BeginTransactionAsync(cancellationToken);
-            return new EfCoreTransaction(transaction);
+            await Task.Run(() =>
+            {
+                _efCoreTransaction = new EfCoreTransaction<TContext>(_dbContext);
+                
+            });
+
+            return _efCoreTransaction;
         }
 
         public async Task CommitTransactionAsync(CancellationToken cancellationToken = default)
-        {
-            if (_dbContext.Database.CurrentTransaction != null)
-                await _dbContext.Database.CurrentTransaction.CommitAsync(cancellationToken);
+        {        
+            await _efCoreTransaction.CommitAsync(cancellationToken);
         }
 
         public void Dispose()
@@ -49,8 +55,7 @@ namespace MultiShop.Order.Infrastructure.Persistence.Data.EfCore.UnitOfWork
 
         public async Task RollbackTransactionAsync(CancellationToken cancellationToken = default)
         {
-            if (_dbContext.Database.CurrentTransaction != null)
-                await _dbContext.Database.CurrentTransaction.RollbackAsync(cancellationToken);
+            await _efCoreTransaction.RollbackAsync(cancellationToken);
         }
     }
 }
