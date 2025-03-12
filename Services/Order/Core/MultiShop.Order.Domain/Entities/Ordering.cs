@@ -55,6 +55,8 @@ namespace MultiShop.Order.Domain.Entities
             DeliveryAddress = Address.Create(this.UserId, district, city, detail);
         }
 
+
+
         public void UpdateOrderDetail(int orderDetailId, int newAmount, decimal newPrice,string newProductName,string newProductImage)
         {
             var orderDetail = _orderDetails.FirstOrDefault(od => od.Id == orderDetailId);
@@ -64,6 +66,16 @@ namespace MultiShop.Order.Domain.Entities
             orderDetail.UpdateDetails(newAmount, newPrice,newProductName,newProductImage,orderDetailId);
 
             orderDetail.Id = orderDetailId;
+            RecalculateTotalPrice();
+        }
+
+        public void DeleteOrderDetail(int orderDetailId)
+        {
+            var orderDetail = _orderDetails.FirstOrDefault(od => od.Id == orderDetailId);
+            if (orderDetail == null)
+                throw new OrderDetailDomainNotFoundException(orderDetailId);
+
+            _orderDetails.Remove(orderDetail);
             RecalculateTotalPrice();
         }
 
