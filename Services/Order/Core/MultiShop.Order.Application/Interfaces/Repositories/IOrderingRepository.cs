@@ -7,6 +7,10 @@ namespace MultiShop.Order.Application.Interfaces.Repositories
         Task<Ordering> UpdateOrderWithAddedToNewOrderDetail(Ordering ordering, OrderDetail orderDetail);
 
         Task<Ordering> UpdateOrderWithUpdatedToNewOrderDetailsAndAddress(Ordering ordering, List<OrderDetail> orderDetails, Address deliveryAddress);
+
+
+        Task<Ordering> UpdateOrderWithUpdatedToOrderDetail(Ordering ordering,
+            OrderDetail orderDetail);
         Task<Ordering> GetOrderingWithOrderDetails(int id);
 
         Task<Ordering> GetOrderingWithOrderDetailsAndAddress(int id);
