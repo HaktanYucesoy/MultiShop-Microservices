@@ -21,7 +21,7 @@ namespace MultiShop.Order.Application.Features.Commands.OrderDetail.Create
         public async Task<CreateOrderDetailCommandResponse> Handle(CreateOrderDetailCommandRequest request, CancellationToken cancellationToken)
         {
             
-            var ordering = await _orderingRepository.GetByIdAsync(request.OrderingId);
+            var ordering = await _orderingRepository.GetByIdWithIncludesAsync(request.OrderingId, x => x.OrderDetails);
             if (ordering == null)
                 throw new NotFoundException(nameof(Ordering), request.OrderingId);
 
