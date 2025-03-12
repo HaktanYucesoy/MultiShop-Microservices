@@ -9,6 +9,7 @@ using MultiShop.Order.Application.Features.Queries.Address.GetAll;
 using MultiShop.Order.Application.Features.Queries.Address.GetById;
 using MultiShop.Order.Application.Features.Queries.OrderDetail.GetAll;
 using MultiShop.Order.Application.Features.Queries.OrderDetail.GetById;
+using MultiShop.Order.Application.Features.Queries.OrderDetail.GetByOrderingId;
 using MultiShop.Order.Application.Features.Queries.OrderDetail.GetByProductId;
 using MultiShop.Order.Application.Features.Queries.Ordering.GetAll;
 using MultiShop.Order.Application.Features.Queries.Ordering.GetById;
@@ -46,6 +47,8 @@ namespace MultiShop.Order.Application.Mapping
                 .ReverseMap();
             CreateMap<OrderDetail,UpdateOrderDetailCommandResponse>()
                 .ReverseMap();
+            CreateMap<OrderDetail, GetByOrderingIdOrderDetailQueryResponse>()
+            .ReverseMap();
 
 
             CreateMap<Ordering, GetAllOrderingQueryResponse>()
