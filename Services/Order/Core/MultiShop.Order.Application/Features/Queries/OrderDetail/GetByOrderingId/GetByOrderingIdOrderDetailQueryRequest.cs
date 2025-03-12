@@ -1,7 +1,7 @@
 ﻿using MediatR;
 namespace MultiShop.Order.Application.Features.Queries.OrderDetail.GetByOrderingId
 {
-    public class GetByOrderingIdOrderDetailQueryRequest : IRequest<GetByOrderingIdOrderDetailQueryResponse>
+    public class GetByOrderingIdOrderDetailQueryRequest : IRequest<IReadOnlyList<GetByOrderingIdOrderDetailQueryResponse>>
     {
 
         public int OrderingId { get; set; }

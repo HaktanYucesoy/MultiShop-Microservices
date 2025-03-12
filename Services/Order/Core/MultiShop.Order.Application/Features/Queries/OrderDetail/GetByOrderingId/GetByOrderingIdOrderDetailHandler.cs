@@ -5,7 +5,7 @@ using MultiShop.Order.Application.Interfaces.Repositories;
 
 namespace MultiShop.Order.Application.Features.Queries.OrderDetail.GetByOrderingId
 {
-    public class GetByOrderingIdOrderDetailHandler : IRequestHandler<GetByOrderingIdOrderDetailQueryRequest, GetByOrderingIdOrderDetailQueryResponse>
+    public class GetByOrderingIdOrderDetailHandler : IRequestHandler<GetByOrderingIdOrderDetailQueryRequest, IReadOnlyList<GetByOrderingIdOrderDetailQueryResponse>>
     {
         private readonly IOrderDetailRepository _orderDetailRepository;
         private IMapper _mapper;
@@ -15,11 +15,11 @@ namespace MultiShop.Order.Application.Features.Queries.OrderDetail.GetByOrdering
             _orderDetailRepository = orderDetailRepository;
             _mapper = mapper;
         }
-        public async Task<GetByOrderingIdOrderDetailQueryResponse> Handle(GetByOrderingIdOrderDetailQueryRequest request, CancellationToken cancellationToken)
+        public async Task<IReadOnlyList<GetByOrderingIdOrderDetailQueryResponse>> Handle(GetByOrderingIdOrderDetailQueryRequest request, CancellationToken cancellationToken)
         {
-            var orderDetail=await _orderDetailRepository.GetByFilterAsync(x => x.OrderingId == request.OrderingId);
+            var orderDetails=await _orderDetailRepository.GetListByFilterAsync(x => x.OrderingId == request.OrderingId);
 
-            return _mapper.Map<GetByOrderingIdOrderDetailQueryResponse>(orderDetail);
+            return _mapper.Map<IReadOnlyList<GetByOrderingIdOrderDetailQueryResponse>>(orderDetails);
         }
     }
 }
