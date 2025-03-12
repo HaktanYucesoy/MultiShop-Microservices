@@ -62,13 +62,14 @@ namespace MultiShop.Order.Domain.Entities
                 throw new OrderDetailDomainNotFoundException(orderDetailId);
 
             orderDetail.UpdateDetails(newAmount, newPrice,newProductName,newProductImage,orderDetailId);
+
             orderDetail.Id = orderDetailId;
             RecalculateTotalPrice();
         }
 
-        private void RecalculateTotalPrice()
+        public void RecalculateTotalPrice()
         {
-            TotalPrice = _orderDetails.Sum(od => od.ProductTotalPrice);
+            TotalPrice = _orderDetails.Select(od=>od.ProductTotalPrice).Sum();
         }
     }
 }

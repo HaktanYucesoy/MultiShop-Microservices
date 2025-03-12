@@ -100,5 +100,27 @@ namespace MultiShop.Order.Infrastructure.Persistence.Data.EfCore.Repositories
 
             return await GetOrderingWithOrderDetailsAndAddress(ordering.Id);
         }
+
+        public async Task<Ordering> UpdateOrderWithUpdatedToOrderDetail(Ordering ordering, OrderDetail orderDetail)
+        {
+
+            var existOrder = await GetOrderingWithOrderDetails(ordering.Id);
+
+            if (existOrder == null)
+                return null!;
+
+            var existingDetail = existOrder.OrderDetails.FirstOrDefault(x=>x.Id == orderDetail.Id);
+
+            if(existingDetail == null)
+                return null!;
+
+            _orderContext.Entry(existingDetail).CurrentValues.SetValues(orderDetail);
+            _orderContext.Entry(existOrder).CurrentValues.SetValues(ordering);
+
+            await _orderContext.SaveChangesAsync();
+
+            return await GetOrderingWithOrderDetailsAndAddress(ordering.Id);
+
+        }
     }
 }
