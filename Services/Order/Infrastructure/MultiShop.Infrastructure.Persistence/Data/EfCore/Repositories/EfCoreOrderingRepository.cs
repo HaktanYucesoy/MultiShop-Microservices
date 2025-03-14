@@ -52,6 +52,23 @@ namespace MultiShop.Order.Infrastructure.Persistence.Data.EfCore.Repositories
             return response;
         }
 
+        public async Task<bool> UpdateOrderByDeleteOrderDetail(OrderDetail orderDetail,Ordering ordering)
+        {
+
+            int existOrderingId = orderDetail.OrderingId;
+            var existOrdering = await _orderContext.Orderings.FirstOrDefaultAsync(o => o.Id == existOrderingId);
+    
+           
+            _orderContext.OrderDetails.Remove(orderDetail);
+            _orderContext.Entry(existOrdering).CurrentValues.SetValues(ordering);
+
+            return await _orderContext.SaveChangesAsync() > 0;
+
+
+
+
+        }
+
         public async Task<Ordering> UpdateOrderWithAddedToNewOrderDetail(Ordering ordering, OrderDetail orderDetail)
         {
             var existingOrdering =await GetOrderingWithOrderDetails(ordering.Id);
