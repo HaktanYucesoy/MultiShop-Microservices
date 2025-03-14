@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using MultiShop.Order.Application.Features.Commands.Ordering.Create;
+using MultiShop.Order.Application.Features.Queries.Ordering.GetAll;
 
 namespace MultiShop.Order.WebApi.Controllers.v1
 {
@@ -23,5 +24,12 @@ namespace MultiShop.Order.WebApi.Controllers.v1
             var result = await _mediator.Send(request);
             return Ok(result);
         }
-    }
+
+        [HttpGet]
+        public async Task<IActionResult> GetOrderingsAsync()
+        {
+            var result = await _mediator.Send(new GetAllOrderingQueryRequest());
+            return Ok(result);
+        }
+    } 
 }
