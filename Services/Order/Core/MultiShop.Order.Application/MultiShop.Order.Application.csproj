@@ -20,6 +20,8 @@
 
   <ItemGroup>
     <Folder Include="Dtos\Ordering\" />
+    <Folder Include="Features\Rules\OrderDetail\" />
+    <Folder Include="Features\Rules\Ordering\" />
   </ItemGroup>
 
 </Project>
