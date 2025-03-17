@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MultiShop.Order.Application.Exceptions.Common;
 using MultiShop.Order.Application.Exceptions.Validation;
 
 namespace MultiShop.Order.WebApi.Middleware
@@ -65,7 +66,21 @@ namespace MultiShop.Order.WebApi.Middleware
                     validationException.Errors
 
                 ),
-                _=>new ExceptionDetails(
+                BusinessException businessException => new ExceptionDetails(
+                    StatusCodes.Status500InternalServerError,
+                    "One business error has occured",
+                    "BusinessFailure",
+                    businessException.Message,
+                    null
+                    ),
+                NotFoundException notFoundException => new ExceptionDetails(
+                    StatusCodes.Status404NotFound,
+                    "Resource not found",
+                    notFoundException.Message,
+                    "NotFound",
+                    null
+                ),
+                _ => new ExceptionDetails(
                      StatusCodes.Status500InternalServerError,
                      "An internal server error has occured",
                      exception.Message,
