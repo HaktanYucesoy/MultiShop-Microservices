@@ -77,7 +77,7 @@ namespace MultiShop.Order.WebApi.Middleware
                     StatusCodes.Status404NotFound,
                     "Resource not found",
                     notFoundException.Message,
-                    "NotFound",
+                    "NotFoundFailure",
                     null
                 ),
                 _ => new ExceptionDetails(
