@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using MultiShop.Order.Application.Behaviors;
+using MultiShop.Order.Application.Interfaces.Rules;
 using System.Reflection;
 
 namespace MultiShop.Order.Application
@@ -19,8 +20,35 @@ namespace MultiShop.Order.Application
             });
             service.AddValidatorsFromAssembly(assembly);
             service.AddAutoMapper(assembly);
+
+            service.AddSubClassesOfType(assembly, typeof(IBaseBusinessRules));
             return service;
 
+        }
+
+
+        public static IServiceCollection AddSubClassesOfType(
+            this IServiceCollection service,
+            Assembly assembly,
+            Type type,
+            Func<IServiceCollection,Type,IServiceCollection>? addWithLifeCylcle=null)
+        {
+            var types = assembly.GetTypes().Where(t => t.IsSubclassOf(type) && type != t).ToList();
+
+
+            foreach (var t in types)
+            {
+                if (addWithLifeCylcle != null)
+                {
+                    addWithLifeCylcle(service, t);
+                }
+                else
+                {
+                    service.AddScoped(t);
+                }
+            }
+
+            return service;
         }
     }
 }
