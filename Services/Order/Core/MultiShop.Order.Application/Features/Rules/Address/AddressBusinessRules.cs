@@ -8,26 +8,13 @@ namespace MultiShop.Order.Application.Features.Rules.Address
     public class AddressBusinessRules:IBaseBusinessRules
     {
         private readonly IAddressRepository _repository;
-        private readonly IOrderingRepository _orderingRepository;
-        public AddressBusinessRules(IAddressRepository repository, IOrderingRepository orderingRepository)
+        
+        public AddressBusinessRules(IAddressRepository repository)
         {
             _repository = repository;
-            _orderingRepository = orderingRepository;
         }
 
-        public async Task WhenDeleteToAddressIfRelatedOrdering(int addressId)
-        {
-         
-            var order = await _orderingRepository.GetByFilterAsync(x=>x.DeliveryAddressId==addressId);
-
-            if (order != null)
-            {
-                throw new BusinessException("You must delete your order before deleting address.");
-            }
-
-        }
-
-        public async Task AddressDetailCannotBeDuplicatedWhenInsertedOrUpdated(string detail,string userId)
+        public async Task AddressDetailCannotBeDuplicatedWhenInsertedOrUpdatedAsync(string detail,string userId)
         {
             var existAddress=await _repository.GetByFilterAsync(x=>x.Detail==detail && x.UserId== userId);
 
@@ -37,9 +24,17 @@ namespace MultiShop.Order.Application.Features.Rules.Address
             }
         }
 
-        public async Task CannotUpdatedOrDeletedToNotExistsAddress(int addressId)
+        public async Task CannotUpdatedOrDeletedToNotExistsAddressAsync(int addressId)
         {
             var address = await _repository.GetByIdAsync(addressId);
+            if (address == null)
+            {
+                throw new NotFoundException("Address not found");
+            }
+        }
+
+        public void CannotUpdatedOrDeletedToNotExistsAddress(Domain.Entities.Address? address)
+        {
             if (address == null)
             {
                 throw new NotFoundException("Address not found");
