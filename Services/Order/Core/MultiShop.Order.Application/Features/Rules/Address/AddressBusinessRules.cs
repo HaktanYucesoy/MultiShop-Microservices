@@ -1,11 +1,11 @@
 ﻿using MultiShop.Order.Application.Exceptions.Common;
 using MultiShop.Order.Application.Interfaces.Repositories;
-using MultiShop.Order.Application.Interfaces.Rules;
+using MultiShop.Order.Application.Rules;
 
 
 namespace MultiShop.Order.Application.Features.Rules.Address
 {
-    public class AddressBusinessRules:IBaseBusinessRules
+    public class AddressBusinessRules:BaseBusinessRules
     {
         private readonly IAddressRepository _repository;
         

@@ -1,10 +1,10 @@
 ﻿using MultiShop.Order.Application.Exceptions.Common;
 using MultiShop.Order.Application.Interfaces.Repositories;
-using MultiShop.Order.Application.Interfaces.Rules;
+using MultiShop.Order.Application.Rules;
 
 namespace MultiShop.Order.Application.Features.Rules.OrderDetail
 {
-    public class OrderDetailBusinessRules:IBaseBusinessRules
+    public class OrderDetailBusinessRules:BaseBusinessRules
     {
         private readonly IOrderDetailRepository _repository;    
         public OrderDetailBusinessRules(IOrderDetailRepository repository)

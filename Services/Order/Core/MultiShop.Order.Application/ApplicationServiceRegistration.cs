@@ -2,7 +2,7 @@
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using MultiShop.Order.Application.Behaviors;
-using MultiShop.Order.Application.Interfaces.Rules;
+using MultiShop.Order.Application.Rules;
 using System.Reflection;
 
 namespace MultiShop.Order.Application
@@ -21,7 +21,7 @@ namespace MultiShop.Order.Application
             service.AddValidatorsFromAssembly(assembly);
             service.AddAutoMapper(assembly);
 
-            service.AddSubClassesOfType(assembly, typeof(IBaseBusinessRules));
+            service.AddSubClassesOfType(assembly, typeof(BaseBusinessRules));
             return service;
 
         }
