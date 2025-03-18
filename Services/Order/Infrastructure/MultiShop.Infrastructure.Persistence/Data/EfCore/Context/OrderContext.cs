@@ -13,7 +13,7 @@ namespace MultiShop.Order.Infrastructure.Persistence.Data.EfCore.Context
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=YourServer;Database=MultiShopOrderDb;Trusted_Connection=True;TrustServerCertificate=True");
+                optionsBuilder.UseSqlServer("Server=HAKTANPC;Database=MultiShopOrderDb;Trusted_Connection=True;TrustServerCertificate=True");
             }
         }
 
