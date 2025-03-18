@@ -50,6 +50,15 @@ builder.Services.AddApiVersioning(x =>
 builder.Services.AddProblemDetails();
 builder.Services.AddExceptionHandler<CustomDiscountExceptionHandler>();
 
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ConfigureHttpsDefaults(https =>
+    {
+        https.SslProtocols = System.Security.Authentication.SslProtocols.Tls12 | System.Security.Authentication.SslProtocols.Tls13;
+        https.CheckCertificateRevocation = false;
+    });
+});
+
 var app = builder.Build();
 
 // Exception handling middleware

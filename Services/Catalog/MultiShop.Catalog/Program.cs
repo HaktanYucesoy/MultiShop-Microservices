@@ -40,7 +40,14 @@ builder.Services.AddApiVersioning(x =>
     x.SubstituteApiVersionInUrl = true;
 });
 
-
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ConfigureHttpsDefaults(https =>
+    {
+        https.SslProtocols = System.Security.Authentication.SslProtocols.Tls12 | System.Security.Authentication.SslProtocols.Tls13;
+        https.CheckCertificateRevocation = false;
+    });
+});
 
 var app = builder.Build();
 app.UseExceptionHandler();
