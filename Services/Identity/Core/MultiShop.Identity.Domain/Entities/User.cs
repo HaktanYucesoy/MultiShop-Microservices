@@ -1,4 +1,6 @@
 ﻿
+using MultiShop.Identity.Domain.Enums;
+
 namespace MultiShop.Identity.Domain.Entities
 {
     public class User : BaseEntity<int>
@@ -51,9 +53,12 @@ namespace MultiShop.Identity.Domain.Entities
 
         public bool Status { get; set; }
 
-
+        public AuthenticatorType AuthenticatorType { get; set; }
+        public virtual ICollection<OtpAuthenticator> OtpAuthenticators { get; set; } = null!;
         public virtual ICollection<RefreshToken> RefreshTokens { get; set; } = null!;
         public virtual ICollection<UserOperationClaim> UserOperationClaims { get; set; } = null!;
+
+        public virtual ICollection<EmailAuthenticator> EmailAuthenticators { get; set; } = null!;
         public string Email { get; set; }
     }
 }

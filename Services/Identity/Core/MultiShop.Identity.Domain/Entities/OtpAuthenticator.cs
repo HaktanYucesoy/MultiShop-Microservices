@@ -7,7 +7,7 @@ namespace MultiShop.Identity.Domain.Entities
         public int UserId { get; set; }
         public byte[] SecretKey { get; set; }
         public bool IsVerified { get; set; }
-
+      
         public virtual User User { get; set; } = null!;
         public OtpAuthenticator()
         {
