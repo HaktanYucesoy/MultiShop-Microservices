@@ -56,6 +56,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiShop.Identity.Applicat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiShop.Identity.Infrastructure.Persistence", "Services\Identity\Infrastructure\MultiShop.Identity.Infrastructure.Persistence\MultiShop.Identity.Infrastructure.Persistence.csproj", "{5D4380AC-D08C-44F4-86C2-63CC6FA9D174}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiShop.Identity.WebAPI", "Services\Identity\Presentation\MultiShop.Identity.WebAPI\MultiShop.Identity.WebAPI.csproj", "{98C02E0A-450A-4660-8E95-BB0070567DA5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -110,6 +112,10 @@ Global
 		{5D4380AC-D08C-44F4-86C2-63CC6FA9D174}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5D4380AC-D08C-44F4-86C2-63CC6FA9D174}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5D4380AC-D08C-44F4-86C2-63CC6FA9D174}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98C02E0A-450A-4660-8E95-BB0070567DA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98C02E0A-450A-4660-8E95-BB0070567DA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98C02E0A-450A-4660-8E95-BB0070567DA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98C02E0A-450A-4660-8E95-BB0070567DA5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -137,5 +143,9 @@ Global
 		{F6CED65D-1141-453E-8664-E4BCDCFA8A8E} = {AD490C4C-E7BF-4E35-AF4D-61FC92FD4455}
 		{110BB289-9405-496F-AFD3-BA1DD6E7A2DC} = {2CC86BE3-E54F-476B-8F98-677C5F07F039}
 		{5D4380AC-D08C-44F4-86C2-63CC6FA9D174} = {AD490C4C-E7BF-4E35-AF4D-61FC92FD4455}
+		{98C02E0A-450A-4660-8E95-BB0070567DA5} = {1EEABB8C-B116-43E3-B181-362426D79CB3}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {149DF35D-EB38-4E8C-AF2F-CA6019B3E74E}
 	EndGlobalSection
 EndGlobal
