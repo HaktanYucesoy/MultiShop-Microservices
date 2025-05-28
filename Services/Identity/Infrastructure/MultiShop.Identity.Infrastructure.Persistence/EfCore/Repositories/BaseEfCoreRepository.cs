@@ -1,8 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
+using MultiShop.Identity.Application.Exceptions.CRUD;
 using MultiShop.Identity.Application.Interfaces.Repositories;
 using MultiShop.Identity.Domain.Entities;
-using MultiShop.Identity.Infrastructure.Persistence.Exceptions;
 using System.Linq.Expressions;
 
 namespace MultiShop.Identity.Infrastructure.Persistence.EfCore.Repositories
