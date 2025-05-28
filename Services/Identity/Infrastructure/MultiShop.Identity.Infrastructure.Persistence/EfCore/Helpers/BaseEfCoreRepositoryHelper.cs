@@ -1,4 +1,4 @@
-﻿using MultiShop.Identity.Infrastructure.Persistence.Exceptions;
+﻿using MultiShop.Identity.Application.Exceptions.CRUD;
 
 namespace MultiShop.Identity.Infrastructure.Persistence.EfCore.Helpers
 {
