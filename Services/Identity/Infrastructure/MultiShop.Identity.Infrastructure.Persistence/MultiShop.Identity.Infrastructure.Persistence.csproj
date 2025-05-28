@@ -20,7 +20,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Order\Core\MultiShop.Order.Application\MultiShop.Order.Application.csproj" />
     <ProjectReference Include="..\..\Core\MultiShop.Identity.Application\MultiShop.Identity.Application.csproj" />
     <ProjectReference Include="..\..\Core\MultiShop.Identity.Domain\MultiShop.Identity.Domain.csproj" />
   </ItemGroup>
