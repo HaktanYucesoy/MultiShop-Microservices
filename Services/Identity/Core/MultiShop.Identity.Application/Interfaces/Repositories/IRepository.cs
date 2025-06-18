@@ -9,12 +9,12 @@ namespace MultiShop.Identity.Application.Interfaces.Repositories
         TEntity GetByFilter(Expression<Func<TEntity,bool>> predicate);
         IList<TEntity> GetAll();
         IList<TEntity> GetListByFilter(Expression<Func<TEntity, bool>> predicate);
-        void Insert(TEntity entity);
-        void Update(TEntity entity);
-        void Delete(TEntity entity);
-        TEntity InsertAndReturnInsertedValue(TEntity entity);
-        TEntity UpdateAndReturnUpdatedValue(TEntity entity);
-        bool DeleteAndReturnDeletedStatus(TEntity entity);
+        void Insert(TEntity entity,bool save = false);
+        void Update(TEntity entity, bool save = false);
+        void Delete(TEntity entity, bool save = false);
+        TEntity InsertAndReturnInsertedValue(TEntity entity,bool save=false);
+        TEntity UpdateAndReturnUpdatedValue(TEntity entity,bool save=false);
+        bool DeleteAndReturnDeletedStatus(TEntity entity, bool save = false);
 
 
 

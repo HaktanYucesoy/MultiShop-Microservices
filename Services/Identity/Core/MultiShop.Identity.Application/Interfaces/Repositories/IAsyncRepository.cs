@@ -10,11 +10,11 @@ namespace MultiShop.Identity.Application.Interfaces.Repositories
         Task<TEntity> GetByFilterAsync(Expression<Func<TEntity, bool>> predicate);
         Task<IList<TEntity>> GetAllAsync();
         Task<IList<TEntity>> GetListByFilterAsync(Expression<Func<TEntity, bool>> predicate);
-        Task InsertAsync(TEntity entity);
-        Task UpdateAsync(TEntity entity);
-        Task DeleteAsync(TEntity entity);
-        Task<TEntity> InsertAndReturnInsertedValueAsync(TEntity entity);
-        Task<TEntity> UpdateAndReturnUpdatedValueAsync(TEntity entity);
-        Task<bool> DeleteAndReturnDeletedStatusAsync(TEntity entity);
+        Task InsertAsync(TEntity entity,bool save=false);
+        Task UpdateAsync(TEntity entity,bool save=false);
+        Task DeleteAsync(TEntity entity, bool save = false);
+        Task<TEntity> InsertAndReturnInsertedValueAsync(TEntity entity, bool save = false);
+        Task<TEntity> UpdateAndReturnUpdatedValueAsync(TEntity entity, bool save = false);
+        Task<bool> DeleteAndReturnDeletedStatusAsync(TEntity entity, bool save = false);
     }
 }

@@ -6,7 +6,13 @@ using System.Linq.Expressions;
 
 namespace MultiShop.Identity.Infrastructure.Persistence.EfCore.Repositories
 {
+    /// <summary>
+    /// Generic EF Core repository **Track‑Only** sürümü.
+    /// SaveChanges / SaveChangesAsync çağrılarını içermez; kalıcılık IUnitOfWork
+    /// tarafından tek noktadan (Commit / ExecuteInTransactionAsync) sağlanır.
+    /// </summary>
     public class BaseEntityFrameworkCoreRepository<TEntity> : IAsyncRepository<TEntity, int>
+
         where TEntity : BaseEntity<int>
     {
         private readonly MultiShopIdentityContext _dbContext;
@@ -16,284 +22,173 @@ namespace MultiShop.Identity.Infrastructure.Persistence.EfCore.Repositories
             _dbContext = dbContext;
         }
 
-        public void Delete(TEntity entity)
-        {   
-            var existEntity= _dbContext.Set<TEntity>().Find(entity.Id);
-            if (existEntity != null)
-            {
-                DeleteOrThrow(entity);
-                if (_dbContext.SaveChanges() <= 0)
-                {
-                    throw new EntityDeleteFailedException(nameof(TEntity));
-                }
-            }
-            else
-            {
-                throw new EntityNotFoundException(nameof(TEntity), entity.Id);
-            }
+        /* ----------------------------------------------------------- */
+        /* CRUD – sadece Track eder, commit IUnitOfWork’e bırakılır   */
+        /* ----------------------------------------------------------- */
+
+        #region Insert
+        public void Insert(TEntity entity, bool save = false)
+        {
+            InsertOrThrow(entity);
+            CommitIfRequested(save);
         }
 
-        public bool DeleteAndReturnDeletedStatus(TEntity entity)
+        public async Task InsertAsync(TEntity entity, bool save = false)
         {
-            var existEntity = _dbContext.Set<TEntity>().Find(entity.Id);
-            if (existEntity != null)
-            {
-                DeleteOrThrow(entity);
-                var deletedCount = _dbContext.SaveChanges();
-                if (deletedCount <= 0)
-                {
-                    throw new EntityDeleteFailedException(nameof(TEntity));
-                }
-
-                return deletedCount > 0;
-            }
-            else
-            {
-                throw new EntityNotFoundException(nameof(TEntity), entity.Id);
-            }
+            await InsertOrThrowAsync(entity);
+            await CommitIfRequestedAsync(save);
         }
 
-        public async Task<bool> DeleteAndReturnDeletedStatusAsync(TEntity entity)
+        /// <summary>
+        /// Eski semantiği korumak için: hemen DB’ye yazılması gerekiyorsa
+        /// IUnitOfWork yerine doğrudan DbContext kullanmak isterseniz bu
+        /// metodu <em>opsiyonel</em> olarak çağırabilirsiniz.
+        /// </summary>
+        public TEntity InsertAndReturnInsertedValue(TEntity entity,bool save=false)
         {
-            var existEntity = await _dbContext.Set<TEntity>().FindAsync(entity.Id);
-            if (existEntity != null)
-            {
-                DeleteOrThrow(entity);
-                var result = await _dbContext.SaveChangesAsync();
-                if(result <= 0)
-                {
-                    throw new EntityDeleteFailedException(nameof(TEntity));
-                }
-
-                return result > 0;
-            }
-            else
-            {
-                throw new EntityNotFoundException(nameof(TEntity), entity.Id);
-            }
-        }
-
-        public async Task DeleteAsync(TEntity entity)
-        {
-            var existEntity = await _dbContext.Set<TEntity>().FindAsync(entity.Id);
-            if (existEntity != null)
-            {
-                DeleteOrThrow(entity);
-                if (await _dbContext.SaveChangesAsync() <= 0)
-                {
-                    throw new EntityDeleteFailedException(nameof(TEntity));
-                }
-            }
-            else
-            {
-                throw new EntityNotFoundException(nameof(TEntity), entity.Id);
-            }
-        }
-
-
-        public IList<TEntity> GetAll()
-        {
-            var allEntities=_dbContext.Set<TEntity>().ToList();
-            return allEntities;
-        }
-
-        public async Task<IList<TEntity>> GetAllAsync()
-        {
-            var allEntities=await _dbContext.Set<TEntity>().ToListAsync();
-            return allEntities;
-        }
-
-        public TEntity GetByFilter(Expression<Func<TEntity, bool>> predicate)
-        {
-            var entity=_dbContext.Set<TEntity>().FirstOrDefault(predicate);
-
-            if (entity == null)
-            {
-                throw new EntityNotFoundException(nameof(TEntity));
-            }
+            InsertOrThrow(entity);
+            CommitIfRequested(save);
             return entity;
         }
 
-        public async Task<TEntity> GetByFilterAsync(Expression<Func<TEntity, bool>> predicate)
-        {
-            var entity = await _dbContext.Set<TEntity>().FirstOrDefaultAsync(predicate);
-            return entity??throw new EntityNotFoundException(nameof(TEntity));
-        }
-
-        public TEntity GetById(int id)
-        {
-            var entity=_dbContext.Set<TEntity>().Find(id);
-            return entity??throw new EntityNotFoundException(nameof(TEntity), id);
-        }
-
-        public async Task<TEntity> GetByIdAsync(int id)
-        {
-            var entity = await _dbContext.Set<TEntity>().FindAsync(id);
-            return entity ?? throw new EntityNotFoundException(nameof(TEntity), id);
-        }
-
-        public IList<TEntity> GetListByFilter(Expression<Func<TEntity, bool>> predicate)
-        {
-            return _dbContext.Set<TEntity>().Where(predicate).ToList() ?? new List<TEntity>();
-        }
-
-        public async Task<IList<TEntity>> GetListByFilterAsync(Expression<Func<TEntity, bool>> predicate)
-        {
-            return await _dbContext.Set<TEntity>().Where(predicate).ToListAsync() ?? new List<TEntity>();
-        }
-
-        public void Insert(TEntity entity)
-        {
-            InsertOrThrow(entity);
-            if (_dbContext.SaveChanges() <= 0)
-            {
-                throw new EntityInsertFailedException(nameof(TEntity));
-            }
-        }
-
-        public TEntity InsertAndReturnInsertedValue(TEntity entity)
-        {
-            InsertOrThrow(entity);
-            var saveChangeResult = _dbContext.SaveChanges();
-            return saveChangeResult <= 0 ?
-                throw new EntityInsertFailedException(nameof(TEntity)) : entity;
-        }
-
-       
-
-        public async Task<TEntity> InsertAndReturnInsertedValueAsync(TEntity entity)
+        public async Task<TEntity> InsertAndReturnInsertedValueAsync(TEntity entity,bool save=false)
         {
             await InsertOrThrowAsync(entity);
-            var saveChangeResult = await _dbContext.SaveChangesAsync();
-            return saveChangeResult <= 0 && entity.Id == 0 ?
-                throw new EntityInsertFailedException(nameof(TEntity)) : entity;
+            await CommitIfRequestedAsync(save);
+            return entity;
         }
+        #endregion
 
-        public async Task InsertAsync(TEntity entity)
+        #region Update
+        public void Update(TEntity entity, bool save = false)
         {
-            await InsertOrThrowAsync(entity);
-            var saveChangeResult = await _dbContext.SaveChangesAsync();
-            if (saveChangeResult <= 0 && entity.Id == 0)
-            {
-                throw new EntityInsertFailedException(nameof(TEntity));
-            }
+            var existEntity = _dbContext.Set<TEntity>().Find(entity.Id)
+                               ?? throw new EntityNotFoundException(nameof(TEntity), entity.Id);
+            UpdateOrThrow(entity, existEntity);
+            CommitIfRequested(save);
         }
 
-      
-
-        public void Update(TEntity entity)
+        public async Task UpdateAsync(TEntity entity, bool save = false)
         {
-            var existEntity = _dbContext.Set<TEntity>().Find(entity.Id);
-            if (existEntity != null)
-            {
-                UpdateOrThrow(entity, existEntity);
-                var updateResult = _dbContext.SaveChanges();
-                if (updateResult <= 0)
-                {
-                    throw new EntityUpdateFailedException(nameof(TEntity));
-                }
-            }
-            else
-            {
-                throw new EntityNotFoundException(nameof(TEntity), entity.Id);
-            }
+            var existEntity = await _dbContext.Set<TEntity>().FindAsync(entity.Id)
+                               ?? throw new EntityNotFoundException(nameof(TEntity), entity.Id);
+            UpdateOrThrow(entity, existEntity);
+            await CommitIfRequestedAsync(save);
         }
 
-        public TEntity UpdateAndReturnUpdatedValue(TEntity entity)
+        public TEntity UpdateAndReturnUpdatedValue(TEntity entity, bool save)
         {
-            var existEntity = _dbContext.Set<TEntity>().Find(entity.Id);
-            if (existEntity != null)
-            {
-                UpdateOrThrow(entity, existEntity);
-                return _dbContext.SaveChanges() <= 0 ?
-                    throw new EntityUpdateFailedException(nameof(TEntity)) : entity;
-            }
-            else
-            {
-                throw new EntityNotFoundException(nameof(TEntity), entity.Id);
-            }
+            var existEntity = _dbContext.Set<TEntity>().Find(entity.Id)
+                                         ?? throw new EntityNotFoundException(nameof(TEntity), entity.Id);
+            UpdateOrThrow(entity, existEntity);
+            CommitIfRequested(save);
+            return entity;
         }
 
-        public async Task<TEntity> UpdateAndReturnUpdatedValueAsync(TEntity entity)
+
+
+        public async Task<TEntity> UpdateAndReturnUpdatedValueAsync(TEntity entity,bool save=false)
         {
-            var existEntity = _dbContext.Set<TEntity>().Find(entity.Id);
-            if (existEntity != null)
-            {
-                UpdateOrThrow(entity, existEntity);
-                return await _dbContext.SaveChangesAsync()<=0?
-                   throw new EntityUpdateFailedException(nameof(TEntity)) : entity;
-            }
-            else
-            {
-                throw new EntityNotFoundException(nameof(TEntity), entity.Id);
-            }
+            var existEntity = await _dbContext.Set<TEntity>().FindAsync(entity.Id)
+                               ?? throw new EntityNotFoundException(nameof(TEntity), entity.Id);
+            UpdateOrThrow(entity, existEntity);
+            await CommitIfRequestedAsync(save);
+            return entity;
         }
+        #endregion
 
-       
-        public async Task UpdateAsync(TEntity entity)
+        #region Delete
+        public void Delete(TEntity entity, bool save = false)
         {
-            var existEntity = _dbContext.Set<TEntity>().Find(entity.Id);
-            if (existEntity != null)
-            {
-                UpdateOrThrow(entity, existEntity);
-                if (await _dbContext.SaveChangesAsync() <= 0)
-                    throw new EntityUpdateFailedException(nameof(TEntity));
-            }
-            else
-            {
-                throw new EntityNotFoundException(nameof(TEntity), entity.Id);
-            }
+            var existEntity = _dbContext.Set<TEntity>().Find(entity.Id)
+                               ?? throw new EntityNotFoundException(nameof(TEntity), entity.Id);
+            DeleteOrThrow(existEntity);
+            CommitIfRequested(save);
         }
 
-        private void UpdateOrThrow(TEntity entity, TEntity? existEntity)
+        public async Task DeleteAsync(TEntity entity, bool save = false)
         {
-            try
-            {
-                _dbContext.Entry(existEntity).CurrentValues.SetValues(entity);
-            }
-            catch (Exception ex)
-            {
-                throw new EntityUpdateFailedException(nameof(TEntity), ex);
-            }
+            var existEntity = await _dbContext.Set<TEntity>().FindAsync(entity.Id)
+                               ?? throw new EntityNotFoundException(nameof(TEntity), entity.Id);
+            DeleteOrThrow(existEntity);
+            await CommitIfRequestedAsync(save);
         }
 
+        public bool DeleteAndReturnDeletedStatus(TEntity entity, bool save = false)
+        {
+            Delete(entity,save);
+            var state = _dbContext.Entry(entity).State;
+            return state == EntityState.Deleted
+                || state == EntityState.Detached;
+        }
+
+        public async Task<bool> DeleteAndReturnDeletedStatusAsync(TEntity entity, bool save = false)
+        {
+            await DeleteAsync(entity,save);
+            var state = _dbContext.Entry(entity).State;
+            return state == EntityState.Deleted
+                || state == EntityState.Detached;
+        }
+        #endregion
+
+        public IList<TEntity> GetAll() => _dbContext.Set<TEntity>().ToList();
+
+        public async Task<IList<TEntity>> GetAllAsync() => await _dbContext.Set<TEntity>().ToListAsync();
+
+        public TEntity GetById(int id) => _dbContext.Set<TEntity>().Find(id)
+                                         ?? throw new EntityNotFoundException(nameof(TEntity), id);
+
+        public async Task<TEntity> GetByIdAsync(int id) => await _dbContext.Set<TEntity>().FindAsync(id)
+                                                 ?? throw new EntityNotFoundException(nameof(TEntity), id);
+
+        public TEntity GetByFilter(Expression<Func<TEntity, bool>> predicate) =>
+            _dbContext.Set<TEntity>().FirstOrDefault(predicate)
+            ?? throw new EntityNotFoundException(nameof(TEntity));
+
+        public async Task<TEntity> GetByFilterAsync(Expression<Func<TEntity, bool>> predicate) =>
+            await _dbContext.Set<TEntity>().FirstOrDefaultAsync(predicate)
+            ?? throw new EntityNotFoundException(nameof(TEntity));
+
+        public IList<TEntity> GetListByFilter(Expression<Func<TEntity, bool>> predicate) =>
+            _dbContext.Set<TEntity>().Where(predicate).ToList();
+
+        public async Task<IList<TEntity>> GetListByFilterAsync(Expression<Func<TEntity, bool>> predicate) =>
+            await _dbContext.Set<TEntity>().Where(predicate).ToListAsync();
+
+        /* ----------------------------------------------------------- */
+        /* Private Helper Metotlar                                     */
+        /* ----------------------------------------------------------- */
         private async Task InsertOrThrowAsync(TEntity entity)
         {
-            try
-            {
-                await _dbContext.AddAsync(entity);
-            }
-
-            catch (Exception ex)
-            {
-                throw new EntityInsertFailedException(nameof(TEntity), ex);
-            }
+            try { await _dbContext.AddAsync(entity); }
+            catch (Exception ex) { throw new EntityInsertFailedException(nameof(TEntity), ex); }
         }
 
         private void InsertOrThrow(TEntity entity)
         {
-            try
-            {
-                _dbContext.Add(entity);
-            }
+            try { _dbContext.Add(entity); }
+            catch (Exception ex) { throw new EntityInsertFailedException(nameof(TEntity), ex); }
+        }
 
-            catch (Exception ex)
-            {
-                throw new EntityInsertFailedException(nameof(TEntity), ex);
-            }
+        private void UpdateOrThrow(TEntity entity, TEntity existEntity)
+        {
+            try { _dbContext.Entry(existEntity).CurrentValues.SetValues(entity); }
+            catch (Exception ex) { throw new EntityUpdateFailedException(nameof(TEntity), ex); }
         }
 
         private void DeleteOrThrow(TEntity entity)
         {
-            try
-            {
-                _dbContext.Set<TEntity>().Remove(entity);
-            }
-            catch (Exception ex)
-            {
-                throw new EntityDeleteFailedException(nameof(TEntity), ex);
-            }
+            try { _dbContext.Remove(entity); }
+            catch (Exception ex) { throw new EntityDeleteFailedException(nameof(TEntity), ex); }
         }
 
+        private void CommitIfRequested(bool commit)
+        {
+            if (commit) _dbContext.SaveChanges();
+        }
+        private async Task CommitIfRequestedAsync(bool commit)
+        {
+            if (commit) await _dbContext.SaveChangesAsync();
+        }
     }
 }
