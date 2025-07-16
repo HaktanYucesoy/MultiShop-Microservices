@@ -36,8 +36,8 @@ namespace MultiShop.Identity.Infrastructure.Persistence.EfCore.UnitOfWork
 
             try
             {
-                await work(ct);          // repo’lar sadece Track etti
-                await CommitAsync(ct);   // tek SaveChanges
+                await work(ct);          
+                await CommitAsync(ct);  
                 await _tx.CommitAsync(ct);
             }
             catch
