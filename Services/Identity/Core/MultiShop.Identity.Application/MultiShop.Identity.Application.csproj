@@ -16,7 +16,6 @@
     <Folder Include="Features\Auth\Queries\" />
     <Folder Include="Features\Auth\Profiles\" />
     <Folder Include="Features\Auth\Rules\" />
-    <Folder Include="Behaviours\" />
   </ItemGroup>
 
   <ItemGroup>
