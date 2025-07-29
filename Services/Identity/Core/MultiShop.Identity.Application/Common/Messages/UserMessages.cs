@@ -13,6 +13,8 @@
 
         public const string EMAIL_CAN_NOT_EMPTY = "Email can not be empty";
         public const string EMAIL_ALREADY_EXISTS = "Email is already taken";
+        public const string INVALID_EMAIL_FORMAT = "Invalid email format";
+        public static string EMAIL_MAX_CHARACTER_LIMIT(int max) => $"Email  must not exceed {max} characters";
 
         public const string FIRST_NAME_CAN_NOT_EMPTY = "First name can not be empty";
         public const string LAST_NAME_CAN_NOT_EMPTY = "Last name can not be empty";       
